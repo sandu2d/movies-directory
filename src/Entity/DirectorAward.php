@@ -23,7 +23,7 @@ class DirectorAward
     private $director;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Award", inversedBy="award_category")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Award", inversedBy="directorAwards")
      * @ORM\JoinColumn(nullable=false)
      */
     private $award;

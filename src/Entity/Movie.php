@@ -44,11 +44,6 @@ class Movie
     private $box_office;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $language;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $poster;
@@ -78,6 +73,12 @@ class Movie
      * @ORM\OneToMany(targetEntity="App\Entity\MovieAward", mappedBy="movie")
      */
     private $movieAwards;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Language", inversedBy="movies")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $language;
 
     public function __construct()
     {
@@ -148,18 +149,6 @@ class Movie
     public function setBoxOffice(?string $box_office): self
     {
         $this->box_office = $box_office;
-
-        return $this;
-    }
-
-    public function getLanguage(): ?int
-    {
-        return $this->language;
-    }
-
-    public function setLanguage(?int $language): self
-    {
-        $this->language = $language;
 
         return $this;
     }
@@ -293,6 +282,18 @@ class Movie
                 $movieAward->setMovie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLanguage(): ?Language
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(?Language $language): self
+    {
+        $this->language = $language;
 
         return $this;
     }
