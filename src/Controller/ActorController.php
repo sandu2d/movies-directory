@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActorController extends AbstractController
 {
     /**
-     * Create a movie
+     * Create an actor
      *
      * @param Request $request
      *
@@ -35,10 +35,11 @@ class ActorController extends AbstractController
     }
 
     /**
-     * Create a movie
+     * Edit an actor
      *
+     * @param string $actorId
      * @param Request $request
-     *
+     * 
      * @Route("/admin/actors/edit/{actorId}", name="admin.actors.actions.edit", methods={"POST"})
      */
     public function edit(string $actorId, Request $request)
@@ -57,6 +58,26 @@ class ActorController extends AbstractController
             $entityManager->persist($actor);
             $entityManager->flush();
         }
+
+        return $this->redirectToRoute('admin.actors');
+    }
+
+    /**
+     * Remove an actor
+     *
+     * @param string $actorId
+     *
+     * @Route("/admin/actors/remove/{actorId}", name="admin.actors.actions.remove", methods={"POST"})
+     */
+    public function remove(string $actorId)
+    {
+        $actor = $this->getDoctrine()
+            ->getRepository(Actor::class)
+            ->find($actorId);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($actor);
+        $entityManager->flush();
 
         return $this->redirectToRoute('admin.actors');
     }

@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Actor;
+use App\Entity\Language;
 use App\Entity\Movie;
-use App\Form\MovieType;
 use App\Form\ActorType;
+use App\Form\LanguageType;
+use App\Form\MovieType;
+use App\Traits\Map\Actor as ActorMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Traits\Map\Actor as ActorMap;
 
 class AdminController extends AbstractController
 {
@@ -109,7 +111,7 @@ class AdminController extends AbstractController
         $actor = $this->getDoctrine()
             ->getRepository(Actor::class)
             ->find($actorId);
-        
+
         $form = $this->createForm(ActorType::class, $actor, [
             'action' => $this->generateUrl('admin.actors.actions.edit', [
                 'actorId' => $actorId,
@@ -121,6 +123,92 @@ class AdminController extends AbstractController
             'title' => 'Edit an actor',
             'page' => 'actors',
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove an actor
+     *
+     * @Route("/admin/actors/remove/{actorId}", name="admin.actors.remove", methods={"GET"})
+     */
+    public function actorsRemove(string $actorId)
+    {
+        return $this->forward('App\Controller\ActorController::remove', [
+            'actorId'  => $actorId,
+        ]);
+    }
+
+    /**
+     * View languages page
+     *
+     * @Route("/admin/languages", name="admin.languages", methods={"GET"})
+     */
+    public function languages()
+    {
+        $languages = $this->getDoctrine()
+            ->getRepository(Language::class)
+            ->findAll();
+
+        return $this->render('admin/languages/index.html.twig', [
+            'title' => 'Languages list',
+            'page' => 'languages',
+            'languages' => $languages,
+        ]);
+    }
+
+    /**
+     * Create language page
+     *
+     * @Route("/admin/languages/create", name="admin.languages.create", methods={"GET"})
+     */
+    public function languagesCreate()
+    {
+        $lang = new Language();
+        $form = $this->createForm(LanguageType::class, $lang, [
+            'action' => $this->generateUrl('admin.languages.actions.create'),
+        ]);
+
+        return $this->render('admin/languages/create.html.twig', [
+            'title' => 'Add a language',
+            'page' => 'languages',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Edit language page
+     *
+     * @Route("/admin/languages/edit/{langId}", name="admin.languages.edit", methods={"GET"})
+     */
+    public function languagesEdit(string $langId)
+    {
+        $lang = $this->getDoctrine()
+            ->getRepository(Language::class)
+            ->find($langId);
+
+        $form = $this->createForm(LanguageType::class, $lang, [
+            'action' => $this->generateUrl('admin.languages.actions.edit', [
+                'langId' => $langId,
+            ]),
+            'isEdit' => true,
+        ]);
+
+        return $this->render('admin/languages/edit.html.twig', [
+            'title' => 'Edit a language',
+            'page' => 'languages',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove a language
+     *
+     * @Route("/admin/languages/remove/{langId}", name="admin.languages.remove", methods={"GET"})
+     */
+    public function languagesRemove(string $langId)
+    {
+        return $this->forward('App\Controller\LanguageController::remove', [
+            'langId'  => $langId,
         ]);
     }
 

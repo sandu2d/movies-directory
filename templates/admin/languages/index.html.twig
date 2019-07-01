@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block options %}
-    <li class="breadcrumb-item"><a href="{{ path("admin.actors.create") }}" class="btn btn-sm btn-success"><i class="mdi mdi-plus"></i></a></li>
+    <li class="breadcrumb-item"><a href="{{ path("admin.languages.create") }}" class="btn btn-sm btn-success"><i class="mdi mdi-plus"></i></a></li>
 {% endblock %}
 
 {% block body %}
@@ -14,26 +14,22 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Nationality</th>
-                <th scope="col">First name</th>
-                <th scope="col">Last name</th>
+                <th scope="col">Name</th>
                 <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for actor in actors %}
+            {% for lang in languages %}
             <tr>
-                <td>{{ actor.id }}</td>
-                <td>{{ actor.nationality }}</td>
-                <td>{{ actor.firstName }}</td>
-                <td>{{ actor.lastName }}</td>
+                <td>{{ lang.id }}</td>
+                <td>{{ lang.name }}</td>
                 <td>
                     <a
-                        href="{{ path('admin.actors.edit', {'actorId': actor.id}) }}"
+                        href="{{ path('admin.languages.edit', {'langId': lang.id}) }}"
                         class="btn btn-sm btn-warning"
                     >Edit</a>
                     <a
-                        href="{{ path('admin.actors.remove', {'actorId': actor.id}) }}"
+                        href="{{ path('admin.languages.remove', {'langId': lang.id}) }}"
                         class="btn btn-sm btn-danger"
                     >Remove</a>
                 </td>
