@@ -109,7 +109,7 @@ class MovieType extends AbstractType
                 'required' => true,
             ])
             ->add('save', SubmitType::class, [
-                'label' => 'Add',
+                'label' => $options['isEdit'] ? 'Save' : 'Add',
                 'attr' => [
                     'class' => 'btn btn-md btn-success float-right',
                 ],
@@ -121,6 +121,7 @@ class MovieType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Movie::class,
+            'isEdit' => false,
         ]);
     }
 }

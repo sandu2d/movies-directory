@@ -8,6 +8,10 @@ use App\Entity\Movie;
 use App\Form\ActorType;
 use App\Form\LanguageType;
 use App\Form\MovieType;
+use App\Entity\Country;
+use App\Entity\Genre;
+use App\Form\GenreType;
+use App\Form\CountryType;
 use App\Traits\Map\Actor as ActorMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -209,6 +213,154 @@ class AdminController extends AbstractController
     {
         return $this->forward('App\Controller\LanguageController::remove', [
             'langId'  => $langId,
+        ]);
+    }
+
+    /**
+     * List of countries
+     *
+     * @Route("/admin/countries", name="admin.countries", methods={"GET"})
+     */
+    public function countries()
+    {
+        $countries = $this->getDoctrine()
+            ->getRepository(Country::class)
+            ->findAll();
+
+        return $this->render('admin/countries/index.html.twig', [
+            'title' => 'Countries list',
+            'page' => 'countries',
+            'countries' => $countries,
+        ]);
+    }
+
+    /**
+     * Create country page
+     *
+     * @Route("/admin/countries/create", name="admin.countries.create", methods={"GET"})
+     */
+    public function countriesCreate()
+    {
+        $country = new Country();
+        $form = $this->createForm(CountryType::class, $country, [
+            'action' => $this->generateUrl('admin.countries.actions.create'),
+        ]);
+
+        return $this->render('admin/countries/create.html.twig', [
+            'title' => 'Add a country',
+            'page' => 'countries',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Edit country page
+     *
+     * @Route("/admin/countries/edit/{countryId}", name="admin.countries.edit", methods={"GET"})
+     */
+    public function countriesEdit(string $countryId)
+    {
+        $country = $this->getDoctrine()
+            ->getRepository(Country::class)
+            ->find($countryId);
+
+        $form = $this->createForm(CountryType::class, $country, [
+            'action' => $this->generateUrl('admin.countries.actions.edit', [
+                'countryId' => $countryId,
+            ]),
+            'isEdit' => true,
+        ]);
+
+        return $this->render('admin/countries/edit.html.twig', [
+            'title' => 'Edit a country',
+            'page' => 'countries',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove a country
+     *
+     * @Route("/admin/countries/remove/{countryId}", name="admin.countries.remove", methods={"GET"})
+     */
+    public function countriesRemove(string $countryId)
+    {
+        return $this->forward('App\Controller\CountryController::remove', [
+            'countryId'  => $countryId,
+        ]);
+    }
+
+    /**
+     * List of genres
+     *
+     * @Route("/admin/genres", name="admin.genres", methods={"GET"})
+     */
+    public function genres()
+    {
+        $genres = $this->getDoctrine()
+            ->getRepository(Genre::class)
+            ->findAll();
+
+        return $this->render('admin/genres/index.html.twig', [
+            'title' => 'Genres list',
+            'page' => 'genres',
+            'genres' => $genres,
+        ]);
+    }
+
+    /**
+     * Create genre page
+     *
+     * @Route("/admin/genres/create", name="admin.genres.create", methods={"GET"})
+     */
+    public function genresCreate()
+    {
+        $genre = new Genre();
+        $form = $this->createForm(GenreType::class, $genre, [
+            'action' => $this->generateUrl('admin.genres.actions.create'),
+        ]);
+
+        return $this->render('admin/genres/create.html.twig', [
+            'title' => 'Add a genre',
+            'page' => 'genres',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Edit genre page
+     *
+     * @Route("/admin/genres/edit/{genreId}", name="admin.genres.edit", methods={"GET"})
+     */
+    public function genresEdit(string $genreId)
+    {
+        $genre = $this->getDoctrine()
+            ->getRepository(Genre::class)
+            ->find($genreId);
+
+        $form = $this->createForm(GenreType::class, $genre, [
+            'action' => $this->generateUrl('admin.genres.actions.edit', [
+                'genreId' => $genreId,
+            ]),
+            'isEdit' => true,
+        ]);
+
+        return $this->render('admin/genres/edit.html.twig', [
+            'title' => 'Edit a genre',
+            'page' => 'genres',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove a genre
+     *
+     * @Route("/admin/genres/remove/{genreId}", name="admin.genres.remove", methods={"GET"})
+     */
+    public function genresRemove(string $genreId)
+    {
+        return $this->forward('App\Controller\GenreController::remove', [
+            'genreId'  => $genreId,
         ]);
     }
 

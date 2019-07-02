@@ -1,0 +1,40 @@
+{% extends "admin.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - 
+    {{ title }}
+{% endblock %}
+
+{% block options %}
+    <li class="breadcrumb-item"><a href="{{ path("admin.genres.create") }}" class="btn btn-sm btn-success"><i class="mdi mdi-plus"></i></a></li>
+{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for genre in genres %}
+            <tr>
+                <td>{{ genre.id }}</td>
+                <td>{{ genre.name }}</td>
+                <td>
+                    <a
+                        href="{{ path('admin.genres.edit', {'genreId': genre.id}) }}"
+                        class="btn btn-sm btn-warning"
+                    >Edit</a>
+                    <a
+                        href="{{ path('admin.genres.remove', {'genreId': genre.id}) }}"
+                        class="btn btn-sm btn-danger"
+                    >Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
