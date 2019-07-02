@@ -1,0 +1,28 @@
+{% extends "form.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - 
+    {{ title }}
+{% endblock %}
+
+{% block body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form action="{{ path('login') }}" method="post">
+        <div class="form-group">
+            <label for="username" style="color:white">Username</label>
+            <input type="text" class="form-control" name="_username" id="username" placeholder="Username" value="{{ last_username }}">
+        </div>
+        <div class="form-group">
+            <label for="passwordInput" style="color:white">Password</label>
+            <input type="password" class="form-control" id="password" name="_password" placeholder="Password">
+        </div>
+        <input type="hidden" name="_csrf_token"
+            value="{{ csrf_token('authenticate') }}"
+        >
+        <input type="hidden" name="_target_path" value="{{ path('admin') }}"/>
+        <button type="submit" class="btn btn-success float-right">Login</button>
+    </form>
+{% endblock %}

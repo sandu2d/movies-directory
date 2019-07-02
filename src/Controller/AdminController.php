@@ -363,14 +363,4 @@ class AdminController extends AbstractController
             'genreId'  => $genreId,
         ]);
     }
-
-    /**
-     * @Route("/admin/login-page", name="admin.login.page", methods={"GET"})
-     */
-    public function login()
-    {
-        return $this->render('admin/login.html.twig', [
-            'title' => 'Login',
-        ]);
-    }
 }

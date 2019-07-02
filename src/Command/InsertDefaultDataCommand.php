@@ -12,19 +12,25 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use App\Entity\Country;
 use App\Entity\Genre;
 use App\Entity\Language;
+use App\Entity\Login;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class InsertDefaultDataCommand extends Command
 {
     protected static $defaultName = 'app:insert-default-data';
 
     private $container;
+    private $encoder;
 
-    public function __construct(ContainerInterface $container)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        UserPasswordEncoderInterface $encoder
+    ) {
         parent::__construct();
 
         $this->container = $container;
+        $this->encoder = $encoder;
     }
 
     protected function configure()
@@ -62,6 +68,13 @@ class InsertDefaultDataCommand extends Command
                 ],
                 [
                     'Name' => 'Best Achievement in Visual Effects',
+                ],
+            ],
+            'Login' => [
+                [
+                    'Username' => 'admin',
+                    'Email' => 'admin@admin.com',
+                    'password' => $this->encoder->encodePassword(new Login(), 'admin'),
                 ],
             ],
         ];
