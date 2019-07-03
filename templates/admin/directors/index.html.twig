@@ -1,0 +1,44 @@
+{% extends "admin.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - 
+    {{ title }}
+{% endblock %}
+
+{% block options %}
+    <li class="breadcrumb-item"><a href="{{ path("admin.directors.create") }}" class="btn btn-sm btn-success"><i class="mdi mdi-plus"></i></a></li>
+{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nationality</th>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for director in directors %}
+            <tr>
+                <td>{{ director.id }}</td>
+                <td>{{ director.nationality }}</td>
+                <td>{{ director.firstName }}</td>
+                <td>{{ director.lastName }}</td>
+                <td>
+                    <a
+                        href="{{ path('admin.directors.edit', {'directorId': director.id}) }}"
+                        class="btn btn-sm btn-warning"
+                    >Edit</a>
+                    <a
+                        href="{{ path('admin.directors.remove', {'directorId': director.id}) }}"
+                        class="btn btn-sm btn-danger"
+                    >Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -3,22 +3,26 @@
 namespace App\Controller;
 
 use App\Entity\Actor;
+use App\Entity\Country;
+use App\Entity\Director;
+use App\Entity\Genre;
 use App\Entity\Language;
 use App\Entity\Movie;
 use App\Form\ActorType;
+use App\Form\CountryType;
+use App\Form\DirectorType;
+use App\Form\GenreType;
 use App\Form\LanguageType;
 use App\Form\MovieType;
-use App\Entity\Country;
-use App\Entity\Genre;
-use App\Form\GenreType;
-use App\Form\CountryType;
 use App\Traits\Map\Actor as ActorMap;
+use App\Traits\Map\Director as DirectorMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
 {
     use ActorMap;
+    use DirectorMap;
 
     /**
      * @Route("/admin", name="admin", methods={"GET"})
@@ -138,7 +142,7 @@ class AdminController extends AbstractController
     public function actorsRemove(string $actorId)
     {
         return $this->forward('App\Controller\ActorController::remove', [
-            'actorId'  => $actorId,
+            'actorId' => $actorId,
         ]);
     }
 
@@ -212,7 +216,7 @@ class AdminController extends AbstractController
     public function languagesRemove(string $langId)
     {
         return $this->forward('App\Controller\LanguageController::remove', [
-            'langId'  => $langId,
+            'langId' => $langId,
         ]);
     }
 
@@ -286,7 +290,7 @@ class AdminController extends AbstractController
     public function countriesRemove(string $countryId)
     {
         return $this->forward('App\Controller\CountryController::remove', [
-            'countryId'  => $countryId,
+            'countryId' => $countryId,
         ]);
     }
 
@@ -360,7 +364,81 @@ class AdminController extends AbstractController
     public function genresRemove(string $genreId)
     {
         return $this->forward('App\Controller\GenreController::remove', [
-            'genreId'  => $genreId,
+            'genreId' => $genreId,
+        ]);
+    }
+
+    /**
+     * List of directors
+     *
+     * @Route("/admin/directors", name="admin.directors", methods={"GET"})
+     */
+    public function directors()
+    {
+        $directors = $this->getDoctrine()
+            ->getRepository(Director::class)
+            ->findAll();
+
+        return $this->render('admin/directors/index.html.twig', [
+            'title' => 'Directors list',
+            'page' => 'directors',
+            'directors' => $this->mapCollectionDirector($directors),
+        ]);
+    }
+
+    /**
+     * Create director page
+     *
+     * @Route("/admin/directors/create", name="admin.directors.create", methods={"GET"})
+     */
+    public function directorsCreate()
+    {
+        $director = new Director();
+        $form = $this->createForm(DirectorType::class, $director, [
+            'action' => $this->generateUrl('admin.directors.actions.create'),
+        ]);
+
+        return $this->render('admin/directors/create.html.twig', [
+            'title' => 'Add a director',
+            'page' => 'directors',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Edit director page
+     *
+     * @Route("/admin/directors/edit/{directorId}", name="admin.directors.edit", methods={"GET"})
+     */
+    public function directorsEdit(string $directorId)
+    {
+        $director = $this->getDoctrine()
+            ->getRepository(Director::class)
+            ->find($directorId);
+
+        $form = $this->createForm(DirectorType::class, $director, [
+            'action' => $this->generateUrl('admin.directors.actions.edit', [
+                'directorId' => $directorId,
+            ]),
+            'isEdit' => true,
+        ]);
+
+        return $this->render('admin/directors/edit.html.twig', [
+            'title' => 'Edit a director',
+            'page' => 'directors',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove a director
+     *
+     * @Route("/admin/directors/remove/{directorId}", name="admin.directors.remove", methods={"GET"})
+     */
+    public function directorsRemove(string $directorId)
+    {
+        return $this->forward('App\Controller\DirectorController::remove', [
+            'directorId' => $directorId,
         ]);
     }
 }
