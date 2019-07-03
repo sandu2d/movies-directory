@@ -44,7 +44,7 @@ class Movie
     private $box_office;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string")
      */
     private $poster;
 

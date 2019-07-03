@@ -2,10 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Actor;
 use App\Entity\Country;
-use App\Entity\Director;
-use App\Entity\Genre;
 use App\Entity\Language;
 use App\Entity\Movie;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -18,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class MovieType extends AbstractType
 {
@@ -46,7 +44,6 @@ class MovieType extends AbstractType
                 'attr' => [
                     'class' => 'form-control',
                 ],
-                'html5' => true,
                 'required' => true,
             ])
             ->add('country', EntityType::class, [
@@ -63,36 +60,6 @@ class MovieType extends AbstractType
                 ],
                 'required' => true,
             ])
-            ->add('genre', EntityType::class, [
-                'class' => Genre::class,
-                'choice_label' => 'name',
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'required' => true,
-            ])
-            ->add('actors', EntityType::class, [
-                'class' => Actor::class,
-                'choice_label' => function ($actor) {
-                    return $actor->getFirstName() . ' ' . $actor->getLastName();
-                },
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'required' => true,
-                'multiple' => true,
-            ])
-            ->add('directors', EntityType::class, [
-                'class' => Director::class,
-                'choice_label' => function ($director) {
-                    return $director->getFirstName() . ' ' . $director->getLastName();
-                },
-                'attr' => [
-                    'class' => 'form-control',
-                ],
-                'required' => true,
-                'multiple' => true,
-            ])
             ->add('language', EntityType::class, [
                 'class' => Language::class,
                 'choice_label' => 'name',
@@ -106,7 +73,17 @@ class MovieType extends AbstractType
                 'attr' => [
                     'class' => 'form-control-file',
                 ],
+                'data_class' => null,
                 'required' => true,
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid JPEG image',
+                    ]),
+                ],
             ])
             ->add('save', SubmitType::class, [
                 'label' => $options['isEdit'] ? 'Save' : 'Add',

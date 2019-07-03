@@ -16,13 +16,17 @@ use App\Form\LanguageType;
 use App\Form\MovieType;
 use App\Traits\Map\Actor as ActorMap;
 use App\Traits\Map\Director as DirectorMap;
+use App\Traits\Map\Movie as MovieMap;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\File;
 
 class AdminController extends AbstractController
 {
     use ActorMap;
     use DirectorMap;
+    use MovieMap;
 
     /**
      * @Route("/admin", name="admin", methods={"GET"})
@@ -49,7 +53,7 @@ class AdminController extends AbstractController
         return $this->render('admin/movies/movies.html.twig', [
             'title' => 'Movies list',
             'page' => 'movies',
-            'movies' => $movies,
+            'movies' => $this->mapCollectionMovie($movies),
         ]);
     }
 
@@ -58,10 +62,10 @@ class AdminController extends AbstractController
      *
      * @Route("/admin/movies/create", name="admin.movies.create", methods={"GET"})
      */
-    public function moviesCreate()
+    public function moviesCreate(FormInterface $form = null)
     {
         $movie = new Movie();
-        $form = $this->createForm(MovieType::class, $movie, [
+        $form = $form ?? $this->createForm(MovieType::class, $movie, [
             'action' => $this->generateUrl('admin.movies.actions.create'),
         ]);
 
@@ -69,6 +73,47 @@ class AdminController extends AbstractController
             'title' => 'Add a movie',
             'page' => 'movies',
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Edit a movie
+     *
+     * @Route("/admin/movies/edit/{movieId}", name="admin.movies.edit", methods={"GET"})
+     */
+    public function moviesEdit(string $movieId)
+    {
+        $movie = $this->getDoctrine()
+            ->getRepository(Movie::class)
+            ->find($movieId);
+
+        $movie->setPoster(
+            new File($this->getParameter('posters_directory').'/'.$movie->getPoster())
+        );
+
+        $form = $this->createForm(MovieType::class, $movie, [
+            'action' => $this->generateUrl('admin.movies.actions.edit', [
+                'movieId' => $movieId,
+            ]),
+            'isEdit' => true,
+        ]);
+
+        return $this->render('admin/movies/edit.html.twig', [
+            'title' => 'Edit a movie',
+            'page' => 'movies',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove a movie
+     *
+     * @Route("/admin/movies/remove/{movieId}", name="admin.movies.remove", methods={"GET"})
+     */
+    public function moviesRemove(string $movieId)
+    {
+        return $this->forward('App\Controller\MovieController::remove', [
+            'movieId' => $movieId,
         ]);
     }
 

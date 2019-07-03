@@ -26,12 +26,21 @@
             {% for movie in movies %}
             <tr>
                 <td>{{ movie.id }}</td>
-                <td>{{ movie.id }}</td>
-                <td>{{ movie.id }}</td>
-                <td>{{ movie.id }}</td>
-                <td>{{ movie.id }}</td>
-                <td>{{ movie.id }}</td>
-                <td>{{ movie.id }}</td>
+                <td>{{ movie.country }}</td>
+                <td>{{ movie.name }}</td>
+                <td>{{ movie.year }}</td>
+                <td>{{ movie.imdb_rate }}</td>
+                <td>{{ movie.language }}</td>
+                <td>
+                    <a
+                        href="{{ path('admin.movies.edit', {'movieId': movie.id}) }}"
+                        class="btn btn-sm btn-warning"
+                    >Edit</a>
+                    <a
+                        href="{{ path('admin.movies.remove', {'movieId': movie.id}) }}"
+                        class="btn btn-sm btn-danger"
+                    >Remove</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
