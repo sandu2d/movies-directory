@@ -21,9 +21,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for actor in actors %}
+            {% for key, actor in actors %}
             <tr>
-                <td>{{ actor.id }}</td>
+                <td>{{ key + 1 }}</td>
                 <td>{{ actor.nationality }}</td>
                 <td>{{ actor.firstName }}</td>
                 <td>{{ actor.lastName }}</td>

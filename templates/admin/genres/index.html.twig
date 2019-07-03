@@ -19,9 +19,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for genre in genres %}
+            {% for key, genre in genres %}
             <tr>
-                <td>{{ genre.id }}</td>
+                <td>{{ key + 1 }}</td>
                 <td>{{ genre.name }}</td>
                 <td>
                     <a

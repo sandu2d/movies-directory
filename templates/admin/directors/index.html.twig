@@ -21,9 +21,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for director in directors %}
+            {% for key, director in directors %}
             <tr>
-                <td>{{ director.id }}</td>
+                <td>{{ key + 1 }}</td>
                 <td>{{ director.nationality }}</td>
                 <td>{{ director.firstName }}</td>
                 <td>{{ director.lastName }}</td>

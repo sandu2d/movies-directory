@@ -20,9 +20,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for country in countries %}
+            {% for key, country in countries %}
             <tr>
-                <td>{{ country.id }}</td>
+                <td>{{ key + 1 }}</td>
                 <td>{{ country.code }}</td>
                 <td>{{ country.nationality }}</td>
                 <td>
