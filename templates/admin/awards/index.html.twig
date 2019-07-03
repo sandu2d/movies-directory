@@ -1,0 +1,46 @@
+{% extends "admin.html.twig" %}
+
+{% block title %}
+    {{ parent() }} - 
+    {{ title }}
+{% endblock %}
+
+{% block options %}
+    <li class="breadcrumb-item"><a href="{{ path("admin.awards.create") }}" class="btn btn-sm btn-success"><i class="mdi mdi-plus"></i></a></li>
+{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Country</th>
+                <th scope="col">Name</th>
+                <th scope="col">Is international?</th>
+                <th scope="col">Description</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, award in awards %}
+            <tr>
+                <td>{{ key + 1 }}</td>
+                <td>{{ award.country }}</td>
+                <td>{{ award.name }}</td>
+                <td>{{ award.nat }}</td>
+                <td>{{ award.desc }}</td>
+                <td>
+                    <a
+                        href="{{ path('admin.awards.edit', {'awardId': award.id}) }}"
+                        class="btn btn-sm btn-warning"
+                    >Edit</a>
+                    <a
+                        href="{{ path('admin.awards.remove', {'awardId': award.id}) }}"
+                        class="btn btn-sm btn-danger"
+                    >Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
