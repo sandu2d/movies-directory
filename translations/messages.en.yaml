@@ -1,0 +1,16 @@
+admin:
+  dashboard:
+    title: Dashboard
+  movies:
+    index:
+      title: Movies list
+      country: Country
+      name: Name
+      year: Year
+      imdb: Imdb rate
+      language: Language
+      actions: Actions
+    create:
+      title: Add a movie
+    edit:
+      title: Edit a movie

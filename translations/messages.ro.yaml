@@ -1,0 +1,16 @@
+admin:
+  dashboard:
+    title: Dashboard
+  movies:
+    index:
+      title: Lista de filme
+      country: Tara
+      name: Nume
+      year: An
+      imdb: Imdb rate
+      language: Limba
+      actions: Actiuni
+    create:
+      title: Adauga un film
+    edit:
+      title: Editeaza un film

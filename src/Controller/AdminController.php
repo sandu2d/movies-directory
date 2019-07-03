@@ -21,6 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class AdminController extends AbstractController
 {
@@ -31,10 +32,10 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="admin", methods={"GET"})
      */
-    public function index()
+    public function index(TranslatorInterface $translator)
     {
         return $this->render('admin/index.html.twig', [
-            'title' => 'Dashboard',
+            'title' => $translator->trans('admin.dashboard.title'),
             'page' => 'dashboard',
         ]);
     }
@@ -44,14 +45,16 @@ class AdminController extends AbstractController
      *
      * @Route("/admin/movies", name="admin.movies", methods={"GET"})
      */
-    public function movies()
+    public function movies(TranslatorInterface $translator)
     {
         $movies = $this->getDoctrine()
             ->getRepository(Movie::class)
             ->findAll();
 
+        $translator->setLocale('ro');
+
         return $this->render('admin/movies/movies.html.twig', [
-            'title' => 'Movies list',
+            'title' => $translator->trans('admin.movies.index.title'),
             'page' => 'movies',
             'movies' => $this->mapCollectionMovie($movies),
         ]);
@@ -62,7 +65,7 @@ class AdminController extends AbstractController
      *
      * @Route("/admin/movies/create", name="admin.movies.create", methods={"GET"})
      */
-    public function moviesCreate(FormInterface $form = null)
+    public function moviesCreate(FormInterface $form = null, TranslatorInterface $translator)
     {
         $movie = new Movie();
         $form = $form ?? $this->createForm(MovieType::class, $movie, [
@@ -70,7 +73,7 @@ class AdminController extends AbstractController
         ]);
 
         return $this->render('admin/movies/create.html.twig', [
-            'title' => 'Add a movie',
+            'title' => $translator->trans('admin.movies.create.title'),
             'page' => 'movies',
             'form' => $form->createView(),
         ]);
@@ -81,7 +84,7 @@ class AdminController extends AbstractController
      *
      * @Route("/admin/movies/edit/{movieId}", name="admin.movies.edit", methods={"GET"})
      */
-    public function moviesEdit(string $movieId)
+    public function moviesEdit(string $movieId, TranslatorInterface $translator)
     {
         $movie = $this->getDoctrine()
             ->getRepository(Movie::class)
@@ -99,7 +102,7 @@ class AdminController extends AbstractController
         ]);
 
         return $this->render('admin/movies/edit.html.twig', [
-            'title' => 'Edit a movie',
+            'title' => $translator->trans('admin.movies.edit.title'),
             'page' => 'movies',
             'form' => $form->createView(),
         ]);
