@@ -4,16 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Actor;
 use App\Entity\Award;
+use App\Entity\AwardCategory;
 use App\Entity\Country;
 use App\Entity\Director;
 use App\Entity\Genre;
 use App\Entity\Language;
 use App\Entity\Movie;
 use App\Form\ActorType;
+use App\Form\AwardCategoryType;
 use App\Form\AwardType;
 use App\Form\CountryType;
 use App\Form\DirectorType;
 use App\Form\GenreType;
+use App\Entity\MovieAward;
 use App\Form\LanguageType;
 use App\Form\MovieType;
 use App\Traits\Map\Actor as ActorMap;
@@ -25,6 +28,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Translation\TranslatorInterface;
+use App\Form\MovieAwardType;
 
 class AdminController extends AbstractController
 {
@@ -121,6 +125,91 @@ class AdminController extends AbstractController
     {
         return $this->forward('App\Controller\MovieController::remove', [
             'movieId' => $movieId,
+        ]);
+    }
+
+    /**
+     * View list of movies` awards
+     *
+     * @param string $movieId
+     * @Route("/admin/movies/{movieId}/awards", name="admin.movies.awards", methods={"GET"})
+     */
+    public function moviesAwards(string $movieId)
+    {
+        $movie = $this->getDoctrine()
+            ->getRepository(Movie::class)
+            ->find($movieId);
+
+        $awards = $movie->getMovieAwards();
+
+        return $this->render('admin/movies/awards/awards.html.twig', [
+            'title' => $movie->getName() . ' - awards',
+            'page' => 'movies',
+            'awards' => $awards,
+            'movie' => $movie,
+        ]);
+    }
+
+    /**
+     * Create an award for the movie
+     *
+     * @param string $movieId
+     * @Route("/admin/movies/{movieId}/awards/create", name="admin.movies.awards.create", methods={"GET"})
+     */
+    public function moviesAwardsCreate(string $movieId)
+    {
+        $movieAward = new MovieAward();
+        $form = $this->createForm(MovieAwardType::class, $movieAward, [
+            'action' => $this->generateUrl('admin.movies.awards.actions.create', [
+                'movieId' => $movieId,
+            ]),
+        ]);
+
+        return $this->render('admin/movies/awards/create.html.twig', [
+            'title' => 'Add an award',
+            'page' => 'movies',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Edit an award for the movie
+     *
+     * @param string $movieId
+     * @Route("/admin/movies/{movieId}/awards/edit/{awardId}", name="admin.movies.awards.edit", methods={"GET"})
+     */
+    public function moviesAwardsEdit(string $movieId, string $awardId)
+    {
+        $movieAward = $this->getDoctrine()
+            ->getRepository(MovieAward::class)
+            ->find($awardId);
+
+        $form = $this->createForm(MovieAwardType::class, $movieAward, [
+            'action' => $this->generateUrl('admin.movies.awards.actions.edit', [
+                'movieId' => $movieId,
+                'awardId' => $awardId,
+            ]),
+            'isEdit' => true,
+        ]);
+
+        return $this->render('admin/movies/awards/edit.html.twig', [
+            'title' => 'Edit an award',
+            'page' => 'movies',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove an award for the movie
+     *
+     * @param string $movieId
+     * @Route("/admin/movies/{movieId}/awards/remove/{awardId}", name="admin.movies.awards.remove", methods={"GET"})
+     */
+    public function moviesAwardsRemove(string $movieId, string $awardId)
+    {
+        return $this->forward('App\Controller\MovieAwardController::remove', [
+            'movieId' => $movieId,
+            'awardId' => $awardId,
         ]);
     }
 
@@ -550,7 +639,7 @@ class AdminController extends AbstractController
         ]);
 
         return $this->render('admin/awards/edit.html.twig', [
-            'title' => 'Edit a director',
+            'title' => 'Edit an award',
             'page' => 'awards',
             'form' => $form->createView(),
         ]);
@@ -565,6 +654,80 @@ class AdminController extends AbstractController
     {
         return $this->forward('App\Controller\AwardController::remove', [
             'awardId' => $awardId,
+        ]);
+    }
+
+    /**
+     * List of awardscategory
+     *
+     * @Route("/admin/awardscategory", name="admin.awardscategory", methods={"GET"})
+     */
+    public function awardscategory()
+    {
+        $awardscategory = $this->getDoctrine()
+            ->getRepository(AwardCategory::class)
+            ->findAll();
+
+        return $this->render('admin/awardscategory/index.html.twig', [
+            'title' => 'Awards category list',
+            'page' => 'awardscategory',
+            'awardscategory' => $awardscategory,
+        ]);
+    }
+
+    /**
+     * Create award category page
+     *
+     * @Route("/admin/awardscategory/create", name="admin.awardscategory.create", methods={"GET"})
+     */
+    public function awardscategoryCreate()
+    {
+        $awardscategory = new AwardCategory();
+        $form = $this->createForm(AwardCategoryType::class, $awardscategory, [
+            'action' => $this->generateUrl('admin.awardscategory.actions.create'),
+        ]);
+
+        return $this->render('admin/awardscategory/create.html.twig', [
+            'title' => 'Add an award category',
+            'page' => 'awardscategory',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Edit award category page
+     *
+     * @Route("/admin/awardscategory/edit/{awardscategoryId}", name="admin.awardscategory.edit", methods={"GET"})
+     */
+    public function awardscategoryEdit(string $awardscategoryId)
+    {
+        $awardscategory = $this->getDoctrine()
+            ->getRepository(AwardCategory::class)
+            ->find($awardscategoryId);
+
+        $form = $this->createForm(AwardCategoryType::class, $awardscategory, [
+            'action' => $this->generateUrl('admin.awardscategory.actions.edit', [
+                'awardscategoryId' => $awardscategoryId,
+            ]),
+            'isEdit' => true,
+        ]);
+
+        return $this->render('admin/awardscategory/edit.html.twig', [
+            'title' => 'Edit a director',
+            'page' => 'awardscategory',
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Remove an award category
+     *
+     * @Route("/admin/awardscategory/remove/{awardscategoryId}", name="admin.awardscategory.remove", methods={"GET"})
+     */
+    public function awardscategoryRemove(string $awardscategoryId)
+    {
+        return $this->forward('App\Controller\AwardCategoryController::remove', [
+            'awardscategoryId' => $awardscategoryId,
         ]);
     }
 }

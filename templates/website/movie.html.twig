@@ -1,0 +1,91 @@
+{% extends 'website.html.twig' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block blockLeft %}
+<div class="row">
+    <div class="col-md-6">
+        <img src="{{ asset('uploads/posters/' ~ movie.poster) }}" alt="{{ movie.name }}" class="img-thumbnail">
+        <br><br>
+        <span class="text-center">
+            <h2>{{ movie.imdbrate }}</h2>
+        </span>
+    </div>
+    <div class="col-md-6">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Title:</th>
+                    <td>{{ movie.name }}</td>
+                </tr>
+                <tr>
+                    <th>Country:</th>
+                    <td>{{ movie.country.code }}</td>
+                </tr>
+                <tr>
+                    <th>Description:</th>
+                    <td>{{ movie.description }}</td>
+                </tr>
+                <tr>
+                    <th>Year:</th>
+                    <td>{{ movie.year }}</td>
+                </tr>
+                <tr>
+                    <th>Box office:</th>
+                    <td>{{ movie.boxoffice }}</td>
+                </tr>
+                <tr>
+                    <th>Language:</th>
+                    <td>{{ movie.language.name }}</td>
+                </tr>
+                <tr>
+                    <th>Genres:</th>
+                    <td>
+                        {% for genre in movie.genre %}
+                            <a href="{{ path('genre.page', {'genreId': genre.id}) }}">{{ genre.name }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Actors:</th>
+                    <td>
+                        {% for actor in movie.actors %}
+                            <a href="#">{{ actor.firstname }} {{ actor.lastname }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Directors:</th>
+                    <td>
+                        {% for director in movie.directors %}
+                            <a href="#">{{ director.firstname }} {{ director.lastname }}</a>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Awards:</th>
+                    <td>
+                        {% if movie.movieawards|length %}
+                            <table class="table">
+                                <tbody>
+                                    {% for award in movie.movieawards %}
+                                        <tr>
+                                            <td>
+                                                {{ award.award.name }}
+                                                <hr>
+                                                {{ award.awardcategory.name }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -27,13 +27,33 @@
                     <li class="nav-item {% if page == "home" %}active{% endif %}">
                         <a class="nav-link" href="{{ path('index') }}">Home {% if page == "home" %}<span class="sr-only">(current)</span>{% endif %}</a>
                     </li>
-                    <li class="nav-item dropdown {% if page == "genre" %}active{% endif %}">
+                    <li class="nav-item dropdown {% if page == "genres" %}active{% endif %}">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Genres {% if page == "genre" %}<span class="sr-only">(current)</span>{% endif %}
+                        Genres {% if page == "genres" %}<span class="sr-only">(current)</span>{% endif %}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             {% for genre in genres %}
                                 <a class="dropdown-item" href="{{ path('genre.page', {'genreId': genre.id}) }}">{{ genre.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown {% if page == "actors" %}active{% endif %}">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Actors {% if page == "actors" %}<span class="sr-only">(current)</span>{% endif %}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for actor in actors %}
+                                <a class="dropdown-item" href="{{ path('actor.page', {'actorId': actor.id}) }}">{{ actor.firstname }} {{ actor.lastname }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown {% if page == "directors" %}active{% endif %}">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Directors {% if page == "directors" %}<span class="sr-only">(current)</span>{% endif %}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for director in directors %}
+                                <a class="dropdown-item" href="{{ path('director.page', {'directorId': director.id}) }}">{{ director.firstname }} {{ director.lastname }}</a>
                             {% endfor %}
                         </div>
                     </li>

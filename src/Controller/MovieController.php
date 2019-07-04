@@ -9,6 +9,7 @@ use App\Entity\Movie;
 use App\Form\MovieType;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use App\Service\PosterUploader;
+use App\Entity\MovieAward;
 
 class MovieController extends AbstractController
 {

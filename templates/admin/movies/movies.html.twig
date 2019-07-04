@@ -33,6 +33,10 @@
                 <td>{{ movie.language }}</td>
                 <td>
                     <a
+                        href="{{ path('admin.movies.awards', {'movieId': movie.id}) }}"
+                        class="btn btn-sm btn-primary"
+                    >Awards</a>
+                    <a
                         href="{{ path('admin.movies.edit', {'movieId': movie.id}) }}"
                         class="btn btn-sm btn-warning"
                     >Edit</a>

@@ -191,6 +191,11 @@ class Movie
         return $this;
     }
 
+    public function setGenres($genres): self
+    {
+        $this->genre = $genres;
+    }
+
     public function getCountry(): ?Country
     {
         return $this->country;

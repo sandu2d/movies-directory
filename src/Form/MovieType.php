@@ -16,6 +16,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
+use App\Entity\Genre;
+use App\Entity\Actor;
+use App\Entity\Director;
 
 class MovieType extends AbstractType
 {
@@ -67,6 +70,37 @@ class MovieType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'required' => true,
+            ])
+            ->add('genre', EntityType::class, [
+                'class' => Genre::class,
+                'choice_label' => 'name',
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => true,
+                'multiple' => true,
+            ])
+            ->add('actors', EntityType::class, [
+                'class' => Actor::class,
+                'choice_label' => function ($actor) {
+                    return $actor->getFirstName() . ' ' . $actor->getLastName();
+                },
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => true,
+                'multiple' => true,
+            ])
+            ->add('directors', EntityType::class, [
+                'class' => Director::class,
+                'choice_label' => function ($director) {
+                    return $director->getFirstName() . ' ' . $director->getLastName();
+                },
+                'attr' => [
+                    'class' => 'form-control',
+                ],
+                'required' => true,
+                'multiple' => true,
             ])
             ->add('poster', FileType::class, [
                 'multiple' => false,
